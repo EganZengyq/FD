@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>福特Techbook</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0a1429 0%, #051225 100%);
+            min-height: 100vh;
+            color: #fff;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 30%, rgba(25, 80, 150, 0.2) 0%, transparent 70%),
+                        radial-gradient(circle at 80% 70%, rgba(150, 50, 100, 0.15) 0%, transparent 70%);
+            z-index: -1;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .tech-header {
+            position: relative;
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 40px;
+        }
+        
+        .tech-title {
+            font-size: 3.2rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #00c6ff, #0072ff, #a166ab);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(0, 114, 255, 0.2);
+            letter-spacing: -0.5px;
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            color: #a0c8ff;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+        
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .card {
+            background: linear-gradient(145deg, rgba(20, 40, 80, 0.85) 0%, rgba(10, 25, 60, 0.9) 100%);
+            border-radius: 20px;
+            padding: 35px 30px;
+            text-align: center;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(100, 150, 255, 0.15);
+            backdrop-filter: blur(12px);
+            position: relative;
+            overflow: hidden;
+            transform: translateY(0);
+            min-height: 280px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5);
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+        }
+        
+        .card.explore::before {
+            background: linear-gradient(90deg, #00c6ff, #0072ff);
+        }
+        
+        .card.durability::before {
+            background: linear-gradient(90deg, #a166ab, #764ba2);
+        }
+        
+        .card.safety::before {
+            background: linear-gradient(90deg, #11998e, #38ef7d);
+        }
+        
+        .card h2 {
+            font-size: 2.1rem;
+            margin-bottom: 20px;
+            color: #f0f8ff;
+            font-weight: 700;
+        }
+        
+        .card p {
+            color: #c0d6ff;
+            line-height: 1.7;
+            margin-bottom: 25px;
+            font-size: 1.05rem;
+        }
+        
+        .card .count {
+            display: inline-block;
+            background: rgba(50, 100, 200, 0.25);
+            border-radius: 30px;
+            padding: 8px 20px;
+            font-weight: 700;
+            color: #a0c8ff;
+            font-size: 1.1rem;
+            border: 1px solid rgba(100, 150, 255, 0.3);
+        }
+        
+        .section-container {
+            padding: 20px 0;
+        }
+        
+        .breadcrumb {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 30px;
+            font-size: 1.05rem;
+            color: #a0c8ff;
+            align-items: center;
+        }
+        
+        .breadcrumb span {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 5px 10px;
+            border-radius: 8px;
+        }
+        
+        .breadcrumb span:hover {
+            color: #4d9fff;
+            background: rgba(50, 100, 200, 0.15);
+        }
+        
+        .breadcrumb .divider {
+            color: rgba(150, 180, 255, 0.5);
+            padding: 0;
+            font-size: 1.4rem;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 35px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid rgba(100, 150, 255, 0.2);
+            color: #f0f8ff;
+            font-weight: 700;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 120px;
+            height: 3px;
+            background: linear-gradient(90deg, #00c6ff, #0072ff);
+            border-radius: 3px;
+        }
+        
+        .items-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 25px;
+        }
+        
+        .item {
+            background: linear-gradient(145deg, rgba(30, 60, 120, 0.7), rgba(15, 35, 75, 0.8));
+            border-radius: 16px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.35s ease;
+            border: 1px solid rgba(100, 150, 255, 0.2);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+            border-color: rgba(100, 150, 255, 0.4);
+            background: linear-gradient(145deg, rgba(40, 80, 150, 0.7), rgba(20, 45, 95, 0.8));
+        }
+        
+        .item h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #f0f8ff;
+            font-weight: 600;
+        }
+        
+        .item .tech-point {
+            background: rgba(0, 100, 200, 0.35);
+            padding: 10px 20px;
+            border-radius: 30px;
+            display: inline-block;
+            font-size: 1rem;
+            margin-top: 12px;
+            border: 1px solid rgba(100, 150, 255, 0.3);
+        }
+        
+        .detail-container {
+            background: linear-gradient(145deg, rgba(20, 40, 80, 0.9), rgba(10, 25, 60, 0.95));
+            border-radius: 20px;
+            padding: 45px;
+            margin-top: 20px;
+            border: 1px solid rgba(100, 150, 255, 0.25);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px);
+        }
+        
+        .detail-container h2 {
+            font-size: 2.3rem;
+            margin-bottom: 25px;
+            color: #f0f8ff;
+            font-weight: 700;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(100, 150, 255, 0.3);
+        }
+        
+        .detail-container h3 {
+            font-size: 1.7rem;
+            color: #4d9fff;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+        
+        .detail-container p {
+            font-size: 1.25rem;
+            line-height: 1.85;
+            color: #e0f0ff;
+            margin-bottom: 25px;
+        }
+        
+        .detail-container p::first-letter {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #4d9fff;
+            float: left;
+            line-height: 0.8;
+            margin-right: 8px;
+        }
+        
+        .tech-footer {
+            text-align: center;
+            margin-top: 70px;
+            padding: 25px;
+            border-top: 1px solid rgba(100, 150, 255, 0.2);
+            color: #7799cc;
+            font-size: 1.05rem;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* 科技感装饰元素 */
+        .tech-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(rgba(100, 150, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(100, 150, 255, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .tech-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .particle {
+            position: absolute;
+            background: rgba(100, 150, 255, 0.15);
+            border-radius: 50%;
+        }
+        
+        @media (max-width: 768px) {
+            .cards-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .items-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .detail-container {
+                padding: 25px;
+            }
+            
+            .tech-title {
+                font-size: 2.5rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="tech-grid"></div>
+    <div class="tech-particles" id="particle-container"></div>
+    
+    <div class="container">
+        <div class="tech-header">
+            <h1 class="tech-title">福特Techbook</h1>
+            <p class="subtitle">探索福特三大核心科技领域：卓越的探索能力、无与伦比的耐久实力和顶级的安全保障，为您呈现福特技术的深度与广度</p>
+        </div>
+        
+        <div id="home-page">
+            <div class="cards-container">
+                <div class="card explore" onclick="showSection('explore')">
+                    <h2>探索威力</h2>
+                    <p>在各种极端环境下的可靠性和适应性技术，确保用户在任何场景下都能顺利出发和通行</p>
+                    <div class="count">12 项技术</div>
+                </div>
+                
+                <div class="card durability" onclick="showSection('durability')">
+                    <h2>耐久实力</h2>
+                    <p>长久耐用性和坚固性技术，确保在各种严苛条件下保持车辆性能和完整性</p>
+                    <div class="count">13 项技术</div>
+                </div>
+                
+                <div class="card safety" onclick="showSection('safety')">
+                    <h2>安全能力</h2>
+                    <p>全方位安全保障技术，覆盖被动安全、主动安全和健康保护领域</p>
+                    <div class="count">14 项技术</div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="section-page" class="hidden fade-in">
+            <div class="breadcrumb">
+                <span onclick="showHome()">首页</span>
+                <span class="divider">›</span>
+                <span id="current-section-name"></span>
+            </div>
+            
+            <div class="section-container">
+                <h2 class="section-title" id="section-title">探索威力</h2>
+                
+                <div class="items-container" id="items-container">
+                    <!-- 内容由JavaScript动态生成 -->
+                </div>
+            </div>
+        </div>
+        
+        <div id="detail-page" class="hidden fade-in">
+            <div class="breadcrumb">
+                <span onclick="showHome()">首页</span>
+                <span class="divider">›</span>
+                <span id="breadcrumb-section" onclick="showSection()"></span>
+                <span class="divider">›</span>
+                <span id="breadcrumb-item"></span>
+            </div>
+            
+            <div class="detail-container">
+                <h2 id="detail-benefit"></h2>
+                <h3 id="detail-tech-point"></h3>
+                <p id="detail-description"></p>
+            </div>
+        </div>
+        
+        <div class="tech-footer">
+            <p>福特Techbook &copy; 2025 | 福特汽车技术参考文档 - 探索未来出行科技</p>
+        </div>
+    </div>
+    
+    <script>
+        // 技术数据
+        const techData = {
+            explore: {
+                name: "探索威力",
+                items: [
+                    {
+                        benefit: "场景无忧，点火必着",
+                        techPoint: "一把着，不熄火",
+                        description: "福特工程标准要求车辆不论何种严苛环境，-30°C to 40°C, 0–5,500m，不论何种油品，发动机都不允许熄火。这样才能保证车子能动，从而保证驾驶员和乘客的安全。福特的低温仓全国跑。在低温仓内，加注不同挥发性特调油，完成从海平面到3000米海拔的零下30度冷启动测试，要求车辆在1s内成功点火，6s实现车辆平稳运行。"
+                    },
+                    {
+                        benefit: "劣质油品，照常远征",
+                        techPoint: "油品测试",
+                        description: "深入研究覆盖45个城市220家加油站的油品数据，全面考虑#87到#98，高挥发、芳烃含量高不利于燃烧、燃烧产生的颗粒物多等多种极端情况。花钱去买各种油品的数据，特调高挥发、低挥发、硫含量、芳烃类、辛烷值等差异各不相同的油品，做三高实车试验，兼顾中国各地油品的差异，确保任何油品车辆不会熄火，保证性能和安全。"
+                    },
+                    {
+                        benefit: "见站就加，无畏补给",
+                        techPoint: "特别能抗劣质油的燃油系统",
+                        description: "深入研究覆盖45个城市220家加油站的油品数据，全面考虑#87到#98，高挥发、芳烃含量高不利于燃烧、燃烧产生的颗粒物多等多种极端情况。花钱去买各种油品的数据，特调高挥发、低挥发、硫含量、芳烃类、辛烷值等差异各不相同的油品，做三高实车试验，兼顾中国各地油品的差异，确保任何油品车辆不会熄火，保证性能和安全。"
+                    },
+                    {
+                        benefit: "低温冰原，极速庇护",
+                        techPoint: "低温测试",
+                        description: "燃油的冷启动性能高于大多数竞品。环境舱、漠河等真实环境-30°C低温严寒中，无论何种汽油油品，福特可以保证6s内完成启动。这不仅是快速稳健的冷启动技术，更是对低温地区探索安全的保障。冬季野外夜晚车辆无法启动的安全风险，无论何种严苛条件下均保障车辆启动。东北要带辅助电瓶，很多东北用户能够接受第二把再启动，但是这在福特就是测试失败了无法接受。"
+                    },
+                    {
+                        benefit: "高温沙漠，拒绝趴窝",
+                        techPoint: "高温测试",
+                        description: "吐鲁番高温40°C酷热下，2小时的完整测试，满载、后备箱加配重块，涵盖大油门、静态怠速的多种工况，在不同的路面条件、空调条件、热启动条件之下，最重要的指标是车辆不允许熄火。"
+                    },
+                    {
+                        benefit: "高原缺氧，动力无损",
+                        techPoint: "高海拔测试",
+                        description: "高原山路地区，比如昆仑山垭口5500米海拔（可可西里）、广袤的西藏地区，福特品牌的车很受欢迎。在格尔木等地做测试，福特车的动力响应快、超车有信心。"
+                    },
+                    {
+                        benefit: "极限路况，按键盲操",
+                        techPoint: "盲操无压力座舱人机工程",
+                        description: "座舱人机工程的核心使命在于最大限度优化人与车辆之间的交互界面，确保驾驶者能安全、高效、舒适且愉悦地掌控车辆，同时减轻驾驶负担，提升整体驾乘体验。这是一门融合人体科学、认知心理学与工程技术的综合学科。为实现这一目标，福特构建了严谨的4大核心体系，12大类别，50+工程规范并辅以近2000页详尽且完善的工程标准，确保每一个细节都经得起推敲。可见与可识别性：确保驾驶员在极短时间内准确获取座舱关键信息，理解车辆状态。可触及性：让不同体型（5%女性~95%男性百分位）的驾驶者，在标准驾驶姿态下，能够轻松、自然地触及所有常用按键。便于操作：操作过程符合直觉，反馈清晰，动作流畅省力，最大限度减少注意力分散和误操作。内饰总体和谐：营造视觉、触感、听觉和谐且符合品牌调性的整体座舱氛围，减少感官疲劳。"
+                    },
+                    {
+                        benefit: "改装拓展，原厂保障",
+                        techPoint: "潜力强大附件锚点预留",
+                        description: "福特对越野的理解不仅限于动力性/通过性等耳熟能详的层面，还有很多更加细致的规范要求，比如越野附件改加装预埋点的设计，福特越野附件改加装预埋点规范对特定越野等级车型有特定的要求，涉及内外饰，前后保，引擎盖，仪表台，中控等系统，详细定义了包括预埋点区域，数量，尺寸规格，距离，承载能力等方面的要求。这些规范设计充分考虑了客户在越野场景下的附件改加装需求，极大地为顾客提供了改加装的可能性，便捷性与可靠性，让客户尽享越野乐趣。"
+                    },
+                    {
+                        benefit: "未知地形，丝滑通过",
+                        techPoint: "赛级底盘调校",
+                        description: "Steering: precise, response, connection"
+                    },
+                    {
+                        benefit: "崎岖路面，稳如轨道",
+                        techPoint: "F1同款动态模拟器",
+                        description: "目前国内还没有车企将动态驾驶模拟器投入实际使用。传统的底盘调校路线是CAE-M1-TPV-DCV-TT, 这个动态驾驶模拟器是在underbody开发阶段就能模拟车辆动态性能，可以进行车辆动态性能（ride/steering/handling）的调教。稀缺性：国内只有北京一台、山东一台。动态驾驶模拟器的难度在于软件和硬件的整合。技术难度在于整车CAE模型的搭建，整车零部件的特性建模，以及虚拟调教参数的设定。福特有一个强大的团队在做此方面的研究。在前期就可以校核整车的底盘参数，包括平台硬点和整车布置， 使车辆的底盘稳定性和操控性都得到最好的验证。"
+                    },
+                    {
+                        benefit: "软硬通吃，峰砥坦途",
+                        techPoint: "12种泥土质地分类",
+                        description: "在福特，仅仅是泥土这一种地质，就能够按照粘土、粉尘、沙砾含量的差异被细分为12种等级，每种等级都会严格定义不同的车辆测试方式及表现标准。"
+                    },
+                    {
+                        benefit: "土路高速，全域征服",
+                        techPoint: "覆盖全球极端地貌",
+                        description: "各有特色的福特测试场所在地点：Borrego Spring: 位于美国加州南部科罗拉多沙漠，夏季常超40摄氏度。极端沙漠地形，兼具高温和干旱，裸露的岩石和沙漠、起伏的山脉和深谷、盐碱沙丘。1、Moab, Utah: 美国犹他州东南部，典型的高原沙漠和峡谷地形，融合了红色砂岩、峡谷、岩柱和沙漠平原。2、Rubicon Trail: 位于美国加州，被誉为世界上最具挑战性的越野探险路线之一，包含大量巨大的岩石块和不规则的岩面。路径狭窄且不平整，有时只有一辆车宽。上坡和下坡坡度大，甚至存在近乎垂直的岩石路段，对车辆的动力和驾驶技术要求非常高。分布岩石阶梯、石块堆积、沟壑、沙地等多种复杂地形，车轮抓地力和悬挂系统都承受极大考验。3、Johnson Valley: 位于美国加州，是著名的越野赛事【King of the Hammers】的举办地，这项赛事被认为是世界上最艰难的越野比赛之一。凸凹不平的岩石地形，岩石大小不一，易损坏车辆底盘、轮胎和悬挂系统，复杂的坡度和深沟，容易让车辆陷进沙坑或翻覆，攀爬这些岩石需要非常高超的驾驶技术和适合的越野装备。4、Tengger Desert: 腾格里沙漠，中国著名的四大沙漠之一，由广袤的流动沙丘、固定沙丘、沙漠戈壁和盐碱地构成，地形多样，沙丘起伏较大。5、Big Red, Dubai: 迪拜著名标志性地形红沙丘。坡度较陡，尤其是在沙丘顶部，爬上去或下滑时，车辆和人的稳定性都很难保证。沙质细软，车辆容易陷落。"
+                    }
+                ]
+            },
+            durability: {
+                name: "耐久实力",
+                items: [
+                    {
+                        benefit: "行业背书，耐久旗帜",
+                        techPoint: "业内顶级耐久标准（J.D.Power背书）",
+                        description: "J.D. Power 2024中国VDS报告验证了这一体系的效果：长安福特以174个PP100跻身三甲，远优于行业平均193个PP100；重点车型如蒙迪欧、锐界L和福克斯分别获得细分市场可靠性第一。对比国内新兴品牌，福特PP100优势平均超过10%-15%，且耐久问题类型覆盖更广，客户投诉率明显更低，体现出全球统一严苛标准的巨大优势。"
+                    },
+                    {
+                        benefit: "沙暴高温，无惧冲刺",
+                        techPoint: "赛级沙漠耐久测试",
+                        description: "该测试旨在验证车辆在持续性越野工况下的全系统耐久性、冷却效能以及底盘/车身的结构稳固性。试验以高还原度模拟目标用户在进行高强度休闲越野活动时的真实使用场景，其测试里程设定依据典型客户在该极端工况下驾驶里程的平均值进行制定。测试场地标准： 双生赛道形态，高速沙漠 + 极限岩石攀爬；测试前需要对驾驶员和路线进行能力标定，确保整个测试过程中每位驾驶员循环的圈速稳定，驾驶员之间相差不超过5%。同一辆车既要 160+ kph飞驰穿越戈壁，也要 1–2 kph 爬 1m 高巨石墙。将沙漠拉力测试与极限攀爬硬核地揉在一起；同一套避震与轮胎要兼顾高速稳定性与岩石通过性。沙漠拉力测试它结合了 Baja-style 高速长途与南加州特有的软沙、干湖床和洗沟地形。风吹沙浪加上车辆碾压形成连续起伏路面，震荡考验车辆悬挂行程与热衰减。干涸河道与水冲沟考验车辆通过性，稍有不慎极易损坏悬架。岩石攀爬路段分布阶梯、V 形缝隙和【瀑布】式落差，需要车辆在极低速下完成近乎垂直的攀升或下降。岩石裸露区附着系数高低不定，而碎石与沙砾带又极易打滑，导致轮胎瞬间失去抓地。很多沟谷没有缓冲平台，完成一个障碍后立刻进入下一个，避震器与轮胎得不到喘息，散热也更加吃紧。测试过程中只有在车辆可靠性、散热策略、驾驶技术与体能管理四条战线上没有短板，才能使车辆即稳住沙漠段的平均速度，又不在石墙前折戟。在接近40摄氏度高温天气下，在10天以内的时间完成累计1600+公里的测试，对测试人员和测试车辆都是极尽严苛的考验。"
+                    },
+                    {
+                        benefit: "无惧颠簸，如履平地",
+                        techPoint: "干涸河床测试和悬架冲击试验",
+                        description: "该测试旨在验证车辆在持续性越野工况下的全系统耐久性、冷却效能以及底盘/车身的结构稳固性。试验以高还原度模拟目标用户在进行高强度休闲越野活动时的真实使用场景，其测试里程设定依据典型客户在该极端工况下驾驶里程的平均值进行制定。测试场地标准： 双生赛道形态，高速沙漠 + 极限岩石攀爬；测试前需要对驾驶员和路线进行能力标定，确保整个测试过程中每位驾驶员循环的圈速稳定，驾驶员之间相差不超过5%。同一辆车既要 160+ kph飞驰穿越戈壁，也要 1–2 kph 爬 1m 高巨石墙。将沙漠拉力测试与极限攀爬硬核地揉在一起；同一套避震与轮胎要兼顾高速稳定性与岩石通过性。沙漠拉力测试它结合了 Baja-style 高速长途与南加州特有的软沙、干湖床和洗沟地形。风吹沙浪加上车辆碾压形成连续起伏路面，震荡考验车辆悬挂行程与热衰减。干涸河道与水冲沟考验车辆通过性，稍有不慎极易损坏悬架。岩石攀爬路段分布阶梯、V 形缝隙和【瀑布】式落差，需要车辆在极低速下完成近乎垂直的攀升或下降。岩石裸露区附着系数高低不定，而碎石与沙砾带又极易打滑，导致轮胎瞬间失去抓地。很多沟谷没有缓冲平台，完成一个障碍后立刻进入下一个，避震器与轮胎得不到喘息，散热也更加吃紧。测试过程中只有在车辆可靠性、散热策略、驾驶技术与体能管理四条战线上没有短板，才能使车辆即稳住沙漠段的平均速度，又不在石墙前折戟。在接近40摄氏度高温天气下，在10天以内的时间完成累计1600+公里的测试，对测试人员和测试车辆都是极尽严苛的考验。悬架冲击试验：100个循环x4次=400次撞坑测试，是行业的10倍以上"
+                    },
+                    {
+                        benefit: "凌驾国标，福特标准",
+                        techPoint: "拒绝【双标】自建砂石路测试",
+                        description: "拒绝【双标】：为坚持全球标准不妥协，在顶级专业试车场内福特自建自维护专用耐久路。很多车企和使用者会对小小的砂石不予重视，但实际上，车辆在恶劣路况上快速行驶时，轮胎带起的砂石冲击力是惊人的。在某次国内竞品车品的摸底耐久测试中，竞品车型在耐久测试后发现的问题有40%以上与砂石击打损伤有直接关系。福特在经过严谨的对标认证之后发现，在国内找不到符合福特标准的耐久砂石路，所以专门自行建造了一个，而不是随波逐流降低标准。行业内对于砂石路做耐久的比例很低，福特的总里程在耐久中占5%，行业在3%，而且福特所使用的砂石路，在砂石材质、砂石密度、连续冲击长度上都是遥遥领先于国内同行的，福特的标准远高于行业标准。"
+                    },
+                    {
+                        benefit: "十年无锈，崭新如初",
+                        techPoint: "福特全球最高防腐蚀标准",
+                        description: "防腐蚀要求在福特汽车公司是全球最高级别标准，在行业内也属于第一梯度，高于中国汽车行业标准，就整车加速腐蚀测试时间而言，福特测试时长比中国行业标准高出近50%。在福特严苛的整车强化腐蚀测试中，车辆需经历高腐蚀强度的盐雾通道、尘土飞扬的砂尘路面、破坏性极强的碎石冲击路面，以及对车身强度要求极高的综合结构耐久路面等多重关卡。在此基础上，车辆每天还要接受强化温湿度交变环境舱的极限考验，进一步加速整车的腐蚀进程。唯有历经如此高强度测试后仍能全面达标，车辆才有资格成为合格的福特产品。福特对于关键零部件如钢冲压板材的底盘副车架、控制臂的防腐蚀设计寿命目标非常严苛，高出中国行业常用目标约50%。对前盖打开在发动机舱内可见的所有金属零件边缘和搭接区域，严格要求无明显红锈。"
+                    },
+                    {
+                        benefit: "关键螺栓，军工防护",
+                        techPoint: "2000+螺丝钉精心防腐",
+                        description: "一辆车上搭载着逾2000颗大小各异的紧固件，每一颗都经过了防腐性能的精心考量和设计。例如，刹车油管的过油螺丝，选用了行业内最高等级的防腐涂层，确保其在复杂工况下的持久耐用。再如在发动机舱内的低压蓄电池负极接地点，保证了车辆所有电气功能在各种复杂工况下能正常工作，该位置的接地紧固件涂层选择也经过周全考虑，不仅保证了优异的导电性能，还采用了最高级别的防腐处理。即使在严苛的腐蚀测试之后，这些关键部件依然能保持卓越的导电功能，为车辆的可靠运行提供坚实保障。"
+                    },
+                    {
+                        benefit: "十年暴晒，拒绝脆化",
+                        techPoint: "亚利桑那光照测试",
+                        description: "源自【太阳山谷】的灵感：挑战极限的测试标准。中国最热的地区新疆的吐鲁番盆地年日照时间大约在 2500到3500小时 之间，全年气温高于35℃的炎热天气平均为99天；高于40℃的酷热天气平均为28天。作为对比，美国亚利桑那州的凤凰城气候更炎热，那里以干燥的沙漠和绵延的山谷闻名，是世界上日照时间最长的地区之一——年日照时间长达3872小时（每年平均334天）。在2023年创下连续113天气温突破38℃, 连续31天超过43. 3℃的记录。根据福特连续5年夏季（五月至九月）在美国亚利桑那凤凰城测得的数据显示该地区空气温度实测高达49℃，其令人难以置信的辐照度（1000W/m2的辐照度环境）成为了福特制定测试标准的基石。"
+                    },
+                    {
+                        benefit: "极限光照，品质如一",
+                        techPoint: "全光谱模拟阳光",
+                        description: "福特汽车的阳光模拟测试采用了远超常规的严苛标准：福特使用全光谱灯源技术进行测试，能够模拟太阳光中的紫外线（UV）、可见光和红外线（IR），覆盖290-2480nm全光谱范围；而国内部分友商使用的是红外光谱甚至有部分仅是热老化不含光照。因为福特的全光谱含有紫外线，能够考察对材料分子结构的破坏，从而避免褪色、脆化和开裂等问题。"
+                    },
+                    {
+                        benefit: "百万投入，保胎一哥",
+                        techPoint: "数百万轮胎验证",
+                        description: "福特至今为数不多的仍然坚持为每一款车型单独研发轮胎的汽车厂商，每条轮胎开发历时超过20个月，包含大量设计研究测试验证的工作，每一个车型的每一种胎型，仅轮胎本身的测试（不含整车级别的测试）超过50项，一个胎型测试轮胎数量超过200条，投入的研发测试费用高达数百万元。"
+                    },
+                    {
+                        benefit: "虐胎守护，放手探索",
+                        techPoint: "10倍方坑轮胎冲击测试",
+                        description: "福特对轮胎方坑撞击性能要求高于行业平均10倍以上，每条福特认可的轮胎都需要通过上百次的方坑冲击验证，不得出现鼓包、裂纹、橡胶皮脱落，轮毂不得变形。"
+                    },
+                    {
+                        benefit: "突遇爆胎，绝不失控",
+                        techPoint: "极限高速爆胎测试",
+                        description: "更极端的爆胎测试：模拟高速行驶中爆胎，同时扎爆一侧的两只轮胎后，车辆继续前进一段距离直至停下的过程中，轮胎不得脱落，否则车辆不稳容易发生翻滚，造成危险。轮胎被刺爆后，车辆稳稳地停下说明轮胎通过该项目。"
+                    },
+                    {
+                        benefit: "六年模拟，竭力抗衰",
+                        techPoint: "轮胎老化耐久测试",
+                        description: "轮胎先在高温环境的老化箱（加速氧化）中模拟6年老化以后，再进行耐久测试，轮胎依然不能失效。国标要求是新轮胎做耐久测试，福特会先把新轮胎进老化箱进行老化，再去做耐久测试，仍然要求必须通过法规的耐久测试，轮胎测试条件比国标要求更为苛刻。"
+                    },
+                    {
+                        benefit: "三倍国标，性能如初",
+                        techPoint: "轮胎冲击耐久测试",
+                        description: "轮胎先在高温环境的老化箱（加速氧化）中模拟1年老化以后，再以超载荷进行耐久测试，且在转毂表面增加冲击柱， 同时轮胎耐久时长要求是国标的3倍以上。国标要求是新轮胎做耐久测试，福特会先把新轮胎进老化箱进行老化，再去做耐久测试，仍然要求必须通过法规的耐久测试，轮胎测试条件比国标要求更为苛刻。"
+                    }
+                ]
+            },
+            safety: {
+                name: "安全能力",
+                items: [
+                    {
+                        benefit: "双重保障，多重安全",
+                        techPoint: "双失效制动系统",
+                        description: "对于国标要求的失效工况：助力失效和制动单管路失效，福特规范要求能提供国标1.8倍的减速度水平；对于国标不要求的失效工况：助力+单管路双失效，福特规范要求仍然能提供一定的减速度水平，确保制动力和安全性。"
+                    },
+                    {
+                        benefit: "制动在线，防撞防腐",
+                        techPoint: "抗冲击防腐制动硬管",
+                        description: "目前国内销售的福特车型，制动硬管均使用PA涂层+PP保护层的设计，PA涂层具备高防腐性能，PP保护层具备强抗石击性能，确保制动力和安全性。对比国内主流汽车品牌大多使用PA+热缩管或者PVF的设计，福特PA+PP的设计在防腐和耐磨性能上具有明显优势。"
+                    },
+                    {
+                        benefit: "急刹场景，精准发力",
+                        techPoint: "2倍刚度制动踏板",
+                        description: "制动踏板的强度设计和刚度设计均明显高于行业标准，尤其是刚度设计，达到行业标准的2倍。"
+                    },
+                    {
+                        benefit: "高速撞击，乘员守护",
+                        techPoint: "整车碰撞试验",
+                        description: "福特不做应试考试，而是从顾客的场景出发确保大家的安全。整车碰撞试验 多于行标50%以上。"
+                    },
+                    {
+                        benefit: "量身定制，全员安全",
+                        techPoint: "0-80岁假人天团",
+                        description: "在常规假人测试的基础上，增加从婴儿到壮汉的全覆盖假人测试工况。常规假人测试（CNCAP & C-IASI）：前排50百分位男性假人，二排5百分位女性假人和儿童假人。福特假人测试：假人范围：小到襁褓婴儿，大到1.88米高、101公斤的95百分位男性假人。每个座位位置都涵盖了不同体型的成人（5百分位、50百分位和95百分位）以及不同年龄的儿童（1岁、3岁、6岁和10岁）的测试。碰撞范围：多达30项以上不同坐姿的碰撞工况。"
+                    },
+                    {
+                        benefit: "母婴标准，杜绝隐患",
+                        techPoint: "世界级禁限用物质管理",
+                        description: "国标GB/T30512《汽车禁用物质要求》管控6族物质，福特前面整合欧洲、美国、加拿大、中国、日本、韩国、斯德哥尔摩公约、鹿丹公约等全球材料环保要求，管控94族（多达10000余种）物质。从国标6族到福特94族，福特为你的安全提供世界级标准。偶氮染料，多用于内饰织物、皮革染色剂，可分解为有毒物质，如亚硝胺和芳香胺。 这些物质对人体健康具有潜在的危害，可能引发致癌或过敏等不良反应。邻苯二甲酸盐，多用于塑料材料中的塑化剂，邻苯二甲酸盐在人体和动物体内发挥着类似雌性激素的作用，可干扰内分泌，使男子精液量和精子数量减少，精子运动能力低下，精子形态异常，严重的会导致睾丸癌，是造成男子生殖问题的“罪魁祸首”。该物质也会增加女性患乳腺癌的几率，还会危害到她们未来生育的男婴的生殖系统。"
+                    },
+                    {
+                        benefit: "毫秒反应，极限防护",
+                        techPoint: "远超行业约束系统",
+                        description: "约束系统包含安全带、安全气囊、气帘。碰撞发生的瞬间，遍布车身的传感器探测到碰撞，把信号传输给RCM（控制器），在毫秒之间RCM根据碰撞发生时的速度、位置、角度、强度等给出指令，约束系统是否需要工作（是否需要点爆气囊），以及如何工作（点哪里的气囊，什么时间点对人能起到最好的保护）。发生碰撞的位置不同，约束系统工作的时间也不同。为了在毫秒之间做出正确的判断给出正确的指令，福特对多达30-40多种常见和不常见的场景进行严苛的设计和测试，防止误爆误作用的实验场景近400个。人正常每分钟眨眼15-20次，每次眨眼持续时间为200毫秒左右，而碰撞发生时约束系统的工作往往在几毫秒以内。对消费者来说，发生碰撞时车内的约束系统要能够快速有效地保护身体，减少碰撞对车内人员的伤害，同时也要防止日常生活中大量可能出现的小磕碰，比如小的碰擦，被突然变道的自行车碰到等等，引发的气囊误点爆，给消费者带来的经济损失。"
+                    },
+                    {
+                        benefit: "预紧释放，精准防护",
+                        techPoint: "场景保护更全面的安全带",
+                        description: "所有车型前、后排安全带通过远超行业标准的20万次超长锁止耐久测试，保证安全带功能的高可靠性。前排双预紧安全带：能够在肩部和腰部同时预紧，能更好地防止人员往前飞出（造成头部和上半身的损伤），或者顺着座椅上往下滑（造成下半身的损伤）；主动限力安全带：改善碰撞中乘员胸部及腹部变形和压力负荷，有效降低乘员伤害；对于碰撞能量比较强的情况，还配备有双段主动限力安全带，通过主动触发第二段限力装置可使安全带力在3000N基础上进一步降低，适时减小安全带对乘员的束缚，从而进一步降低乘员胸部损伤；同时由于安全气囊的保护，乘员上身也不致于撞击到方向盘和仪表板等硬物。这就需要RCM精准地控制约束系统来实现对乘员的极致保护；后排安全带带有Stop Function：碰撞第一时间安全带预紧之后（先收紧固定），系统会设定一个特定的拉出量（再适当放松），释放一定空间，允许乘客的上半身少量向前移动，以减少对颈部的伤害，对胸骨和内脏的挤压，在确保不撞到前排座椅的前提下，不至于勒得太紧；在碰撞发生的瞬间，安全带的瞬间拉力在不到10毫秒内最高可能达到6000N，相当于将600公斤重物通过这条不到5公分宽的带子施加在人的胸腹部，如果说心肺复苏有可能会压断人的肋骨，那这个损伤可能会严重得多。通过引入安全带限力装置，在25-30毫秒左右开始工作，通过限力杆吸能后扭转变形，使得胸部压力保持在3000N左右，减少乘员胸部损伤。"
+                    },
+                    {
+                        benefit: "吸能缓冲，全面防护",
+                        techPoint: "安全气囊和侧气帘",
+                        description: "福特按照全球最为严苛的标准设计、验证，充分考虑了设计和制造偏差，确保系统的高稳定性、高可靠性和高耐久性。气囊开发验证通过高达107摄氏度超长时间的热老化，最高可达85度高温高极限和零下35摄氏度的低温低极限气囊爆破等测试，确保车辆在恶劣环境下依然能有效保护乘员；RCM精准分析侧碰信号并利用合适算法尽早给气囊发出点火指令，使其充饱时正好接住乘员的头部、胸部，一方面不会让气囊给乘员造成额外伤害，一方面能最大程度上用气囊和安全带缓冲乘员向前的运动，降低碰撞能量对乘员的伤害；福特特有：正面碰撞时的中心柱碰，模拟碰撞到电线杆、树木等和车头接触面积较小的物体（有部分事故撞了柱子结果气囊没点爆），钻卡（与前方大卡车发生碰撞钻到下面）等特殊场景，而那些轻微事故，气囊不该被点爆的情形，多达14种。在满足国标的人体模块试验要求之外，福特独有的上轮缘 & 下轮缘刚度试验 ， 确保方向盘兼顾结构刚度的同时也满足变形吸能要求。福特特有的场景：新手司机，常常会出现【抱着方向盘】开车的姿势（离方向盘很近），或者副驾座位比较靠前，都要考虑气囊或者气帘发生作用时，这些坐姿的人员是否能得到有效的安全保护。在智能化座舱的大趋势下，屏幕变得越来越宽，中控显示屏对乘客气囊的的展开路径提出了挑战。【福特要求】乘客气囊通过优化袋型和折叠方式设计，确保气囊点爆后按既定路径展开，且不会造成前风挡玻璃，屏幕产生碎裂飞溅物划伤气袋或乘员。福特烈马配备二级气囊 ：比如说对于女性足够保护了，第二段就不点。但是如果对于那种高大的，比如说那种体型较大的乘员，碰撞时的冲击力较大，就两段都要点爆。这是有感应器的，会根据不同人的体重，还有座椅位置来选择点火策略，是点一级还是点二级。在安全设计上也是充分考虑到用户真实的使用场景，仅仅关于翻滚这一项，独特的翻滚点爆和误点策略，近40项实验。"
+                    },
+                    {
+                        benefit: "极限过弯，杜绝侧倾",
+                        techPoint: "操稳试验",
+                        description: "很多自主只做干地，网上有大量自主品牌车辆在较浅水膜湿地失控的视频案例，福特会做湿地试验，确保车辆在极限操控避险下的安全性能"
+                    },
+                    {
+                        benefit: "自动阻燃，贴心守护",
+                        techPoint: "烧草试验",
+                        description: "非铺装路面野营场景，细致入微的安全考虑"
+                    },
+                    {
+                        benefit: "极端过热，无惧风险",
+                        techPoint: "发动机失火过热试验",
+                        description: "热管理的工况，友商指望报警机制，我们是做在前面"
+                    },
+                    {
+                        benefit: "严苛标准，试探边界",
+                        techPoint: "专业车手进阶培养体系",
+                        description: "一位T3级别的车手，至少得历经2年的专业培训和考核。而成为T4级别的车手，则不仅仅要有勤奋，更要有百里挑一的天赋。获得T4级别认证的车手，他们的越野水平可以去巴哈赛场和专业赛车手一争高下。"
+                    },
+                    {
+                        benefit: "托付前行，可靠保障",
+                        techPoint: "赛级测试车手验证",
+                        description: "优秀的测试车手对于测试车辆有超高的敏感度，能够感知车辆细微的调整带来的驾驶感受差异。优秀的测试车手能够稳定精准控制车辆动态，不断将车辆推向极限，锁定最佳的调校数据。"
+                    }
+                ]
+            }
+        };
+        
+        let currentSection = '';
+        
+        // 显示首页
+        function showHome() {
+            document.getElementById('home-page').classList.remove('hidden');
+            document.getElementById('section-page').classList.add('hidden');
+            document.getElementById('detail-page').classList.add('hidden');
+            document.querySelectorAll('.fade-in').forEach(el => el.classList.remove('fade-in'));
+        }
+        
+        // 显示二级页面
+        function showSection(sectionId) {
+            if (sectionId) currentSection = sectionId;
+            
+            const section = techData[currentSection];
+            
+            document.getElementById('current-section-name').textContent = section.name;
+            document.getElementById('section-title').textContent = section.name;
+            
+            const itemsContainer = document.getElementById('items-container');
+            itemsContainer.innerHTML = '';
+            
+            section.items.forEach((item, index) => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'item';
+                itemElement.innerHTML = `
+                    <h3>${item.benefit}</h3>
+                    <div class="tech-point">${item.techPoint}</div>
+                `;
+                itemElement.onclick = () => showDetail(index);
+                itemsContainer.appendChild(itemElement);
+            });
+            
+            document.getElementById('home-page').classList.add('hidden');
+            document.getElementById('section-page').classList.remove('hidden');
+            document.getElementById('detail-page').classList.add('hidden');
+            document.querySelectorAll('.fade-in').forEach(el => el.classList.remove('fade-in'));
+            document.getElementById('section-page').classList.add('fade-in');
+        }
+        
+        // 显示三级页面
+        function showDetail(index) {
+            const section = techData[currentSection];
+            const item = section.items[index];
+            
+            document.getElementById('detail-benefit').textContent = item.benefit;
+            document.getElementById('detail-tech-point').textContent = item.techPoint;
+            document.getElementById('detail-description').textContent = item.description;
+            document.getElementById('breadcrumb-section').textContent = section.name;
+            document.getElementById('breadcrumb-item').textContent = item.benefit;
+            
+            document.getElementById('home-page').classList.add('hidden');
+            document.getElementById('section-page').classList.add('hidden');
+            document.getElementById('detail-page').classList.remove('hidden');
+            document.querySelectorAll('.fade-in').forEach(el => el.classList.remove('fade-in'));
+            document.getElementById('detail-page').classList.add('fade-in');
+        }
+        
+        // 创建背景粒子效果
+        function createParticles() {
+            const container = document.getElementById('particle-container');
+            const particleCount = 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // 随机大小
+                const size = Math.random() * 4 + 1;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // 随机位置
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                
+                // 随机透明度
+                particle.style.opacity = Math.random() * 0.3 + 0.1;
+                
+                container.appendChild(particle);
+            }
+        }
+        
+        // 初始化页面
+        window.onload = function() {
+            showHome();
+            createParticles();
+        };
+    </script>
+</body>
+</html>
